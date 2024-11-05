@@ -1,0 +1,136 @@
+
+
+C64 ROM TAPE 
+
+--------------------------------------------------------------------------------
+
+Can be found... EVERYWHERE!...The only tape loader available on a freshly booted C64 is
+this one, In order for cassette software to load into the C64 there *must* be files of 
+this format on the tape, if only at the beginning (typically containing an alternative 
+'turbotape' loader).
+
+The loader is unpopular because it is PAINFULLY slow due to the fact that all files are 
+written out twice and each encoded byte requires 20 pulses!. However, there DO exist a 
+few commercial games (not many) written out using ONLY this format, they include... 
+Laser Zone, Burger Time, Gridrunner, Matrix, Caverns of Khafka and H.E.R.O. 
+
+--------------------------------------------------------------------------------
+
+3 different pulse types are used... 
+
+(S)hort  : $30
+(M)edium : $42
+(L)ong   : $56 
+
+Pulses are always interpreted as a pair... 
+
+(L,M) = new-data marker
+(L,S) = end-of-data marker
+(S,M) = 0 bit
+(M,S) = 1 bit 
+
+Pilot stream: 'S' pulses (various quantities). 
+
+Pilot terminates when a new byte begins, 
+
+Each byte is organized as follows... 
+
+
+(L,M) (?,?) (?,?) (?,?) (?,?) (?,?) (?,?) (?,?) (?,?) (?,?) 
+  |     |     |     |     |     |     |     |     |     |  
+  |    bit0  bit1  bit2  bit3  bit4  bit5  bit6  bit7   |  
+  |                                                     | 
+new-data marker                                      checkbit
+
+
+Each byte is encoded as a sequence of 20 pulses (10 pairs), beginning with a new-data 
+marker (L,M), then the 8 bits of the byte in LSbF format and always terminating in a 
+checkbit which is computed with... 
+
+1 xor Bit0 xor Bit1 xor Bit2 xor Bit3 xor Bit4 xor Bit5 xor Bit6 xor Bit7. 
+
+The data is finished when you read an end-of-data marker (L,S) instead of (L,M) at the start
+of a new byte. 
+
+Note: Each block has a final checkbyte which is always the last byte of the block, 
+ie. the one before the end-of-data marker.
+
+The checkbyte is computed as.. 0 xor all other bytes. 
+
+Following the end-of-data marker is always some trailing tone ('S' pulses). 
+
+
+Structure:-
+---------- 
+
+When the C64 saves a program to tape it creates 4 files...
+
+HEADER. 
+HEADER REPEATED. 
+DATA. 
+DATA REPEATED. 
+
+
+The correct structure on tape is... 
+
+> pilot tone (27136 ($6A00) 'S' pulses)
+> HEADER (9+192+1 bytes)
+> pilot tone (79 'S' pulses)
+> HEADER REPEATED (9+192+1 bytes)
+> pilot tone (78 'S' pulses)
+
+> pause (roughly 0.3 sec)
+
+> pilot tone (5376 ($1500) 'S' pulses)
+> DATA (9+DataSize+1 bytes)
+> pilot tone (79 'S' pulses)
+> DATA REPEATED (9+DataSize+1 bytes)
+> pilot tone (78 'S' pulses) 
+
+
+Both HEADER and DATA blocks have the following sequence in the first 9 bytes:- 
+
+$89 $88 $87 $86 $85 $84 $83 $82 $81 
+
+Both HEADER and DATA *repeated* blocks have the same sequence with bit 7 clear:- 
+
+$09 $08 $07 $06 $05 $04 $03 $02 $01 
+
+For the Header the following information is sent after the sync sequence:- 
+
+1 Byte  : File type... 
+
+          $01= BASIC program
+          $02= Data block for SEQ file
+          $03= PRG file
+          $04= SEQ file
+          $05= End-of-tape marker 
+
+2 Bytes  : Start Address (LSBF).
+2 Bytes  : End Address (LSBF).
+16 Bytes : File Name.  
+
+
+After the Name there is some additional data, making the WHOLE length of the Header block
+202 bytes long.... 
+
+- 9 byte sync sequence.
+- 21 bytes of file information (see above).
+- 171 bytes unused. 
+- 1 byte checksum. 
+
+The "unused" 171 bytes in the header block are often used by commercial loaders to store
+executable loader code or pretty much any additional data or code the loader or program may
+require. 
+
+Notes:- 
+
+Header blocks always load into the Tape Buffer at $033C. 
+
+If the File Type is 'BASIC Program' the start address for loading will be $0801 regardless
+of what may be written in the 'Start Address' Fields. 
+
+
+
+
+

@@ -1,0 +1,18 @@
+
+
+HITLOAD 
+
+--------------------------------------------------------------------------------
+
+A customized version of Freeload used on "Hit Squad" releases. 
+
+Threshold = $27C (636) clock cycles (TAP byte = $4E).
+Bit 0 : $34
+Bit 1 : $66
+
+Everything else is identical to Freeload. 
+
+
+
+
+

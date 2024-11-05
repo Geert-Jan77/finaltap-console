@@ -1,0 +1,54 @@
+
+
+CYBERLOAD FORMAT 1 
+
+--------------------------------------------------------------------------------
+
+Threshold : varies between tapes.
+Endianess : MSbF
+
+
+The loader code (LOADER1) is contained (enciphered) in the "spare" 171 bytes of the CBM 
+Header block, it is deciphered by a program in the CBM Data block. 
+
+The files it loads are organised within a chain... 
+
+Pilot byte : Varies between tapes (commonly $0F) (*128)
+Sync byte : Varies between tapes (commonly $F0)
+File Chain follows... 
+
+Each file in the chain has the following format... 
+
+1 byte : Load Offset. 
+
+The offset between the End Address of the previous file and the Start Address of the current 
+one, if there was no previous file then use $FFD5 as initial end address.
+(Hint : 1st file always has offset of $2D, giving a Start Address of $0002). 
+
+n bytes : Data 
+
+Each byte is followed by an extra bit, if the bit is set(1) then another data byte follows, 
+if the extra bit is clear(0) then we reached end-of-file, the byte before it is NOT data 
+and may be disregarded. 
+
+1 bit : Following File Flag. 
+
+If set(1) then another file follows immediately, else we have reached the end of the chain.
+
+
+
+--------------------------------------------------------------------------------
+Notes :- 
+
+Following the chain is always 1 more byte, usually containing $00. 
+
+The only files found so far written in this format are Cyberload Loader 2, and other 
+loader/protection related files. (ie. no actual GAME data). 
+
+Cyberload tapes examined so far only contained 1 file-chain of this format, immediately 
+following the CBM boot files. 
+
+
+
+
+

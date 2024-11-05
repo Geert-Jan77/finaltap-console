@@ -1,0 +1,106 @@
+
+
+BLEEPLOAD 
+
+--------------------------------------------------------------------------------
+
+Can be found on... Bubble Bobble, Druid, Gunstar, Headbanger, IO, Park Patrol, Sentinel, 
+Thrust, Warhawk etc.. 
+
+Note : Most Bleepload tapes contain Bleepload AND Bleepload Special!. 
+
+--------------------------------------------------------------------------------
+
+Threshold = $232 (562) clock cycles (TAP byte $45).
+Bit 0 : $2F
+Bit 1 : $5A
+Endianess : MSbF 
+
+Data is structured from sub-blocks, all consecutively numbered and there SHOULD be a short
+pause in between, on many taps i looked at these pauses are often corrupted or too small 
+to register as a proper pause (20,000 cycles) which causes the 1st byte of the following 
+blocks pilot to be corrupted. 
+
+Each sub-block has the following structure...
+
+Pilot : pb (initial value is $0F, any number of them, usually 10)
+Sync  : pb XOR $FF, pb. 
+
+1 byte  : Pilot byte (pb) for next block
+1 byte  : Block number (they begin at 0 and increase by 1)
+2 bytes : Load address (LSBF)
+n bytes : Data (default size is 256 bytes, but first block (number 0) is 64 bytes long)
+1 byte  : Dummy byte count (d)
+d bytes : Dummies (all ignored)
+1 byte  : Checksum (XOR of all n data bytes)
+2 bytes : Execution address (LSBF, CPU jumps here after block is loaded)
+1 byte  : unknown. 
+
+
+Notes:- 
+
+The first block in a chain has pilot tone which is a number of bit 1's (around 2000) there 
+is often corruption in this during first 100+ pulses. 
+
+The final block of a chain appears to have an extra 8 bytes (64 pulses) at the end before 
+trailing tone begins, this is actually another file type, it consists of 8 bytes and usually
+
+Has 2040(ish) pulses of trailing tone. 
+
+I call this small file "Bleepload Trigger". 
+
+Structure... 
+
+8 bytes... 
+
+!!!! <insert structure here> !!!! 
+
+This 8 byte file is read in when the final 'proper' block executes. it appears to be 
+encrypted and is responsible for triggering some activity in the program, ie. displaying 
+bitmap or starting the game. it is typically read into zero page for deciphering. 
+
+
+
+--------------------------------------------------------------------------------
+BLEEPLOAD SPECIAL 
+
+--------------------------------------------------------------------------------
+
+Threshold = $232 (562) clock cycles (TAP byte $45).
+Bit 0 : $2F
+Bit 1 : $5A
+Endianess : MSbF 
+
+Data is structured as a chain of 256 byte sub-blocks, all consecutive and without pauses 
+in between. 
+
+Each sub-block has the following structure... 
+
+Pilot : pb (*10) (the value of 'pb' can vary between chains and tapes).
+Sync  : pb XOR $FF, pb.
+
+1 byte    : block no. (they start at 0) 
+2 bytes   : load address (LSBF)
+1 byte    : ignored
+1 byte    : if equal to load address high +1, this is last block.
+2 bytes   : execution address (LSBF)
+256 bytes : data. 
+1 byte    : checksum (0 XOR all 256 data bytes)
+
+Note: You can tell the difference between "Bleepload" and "Bleepload Special" by looking at
+      the 1st byte after the 'sync byte 2' if its 0 then its Bleepload Special. 
+
+Example pb's... 
+
+- Thrust : $50
+- Park Patrol : $2A 
+
+Notes:- 
+
+The first block in a chain has leading tone which is a number of bit 1's (around 2000), 
+it is often corrupted at the beginning. 
+
+
+
+
+

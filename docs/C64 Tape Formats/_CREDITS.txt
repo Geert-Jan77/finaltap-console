@@ -1,0 +1,59 @@
+
+
+CREDITS
+
+
+The tape formats documented here are the result of many hours of code analysis
+and testing, they represent the work of several people...
+
+Alphabetically...
+
+
+
+ Andreas Matthies  
+
+ Ben Castricum 
+
+ Fabrizio Gennari 
+
+ Luigi Di Fraia  
+
+ Markus Brenner
+
+ Richard Storer 
+
+ Sami Silaste 
+
+ Stewart Wilson
+        
+ Tom Roger Skauen  
+
+ Tomaz Kac 
+
+
+
+I am sorry I don't give individual credits for particular formats, but in many
+cases the documentation has been contributed to by other people after its initial
+publication (and possibly before) and I simply don't know who might have contributed
+information to any particular format.
+
+If you find documentation in this archive that you believe YOU contributed but do not 
+see YOUR name above then please get in touch.
+
+
+e-mail: subc@operamail.com
+
+
+Note : If you edit/add files in this archive and redistribute then please replace my
+       e-mail address with your own!.
+
+
+
+
+
+
+
+
+
+
+

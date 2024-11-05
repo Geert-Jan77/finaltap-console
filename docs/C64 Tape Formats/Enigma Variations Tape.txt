@@ -1,0 +1,43 @@
+
+
+Enigma Variations Tape
+
+--------------------------------------------------------------------------------
+
+Found on...
+
+Defenders of the Earth, Count Duckula, Hong Kong Phooey, Postman Pat, Postman Pat 2, 
+Sooty and Sweep, Thomas the Tank Engine, Slug, Father Christmas, Kick Off 2, 
+Nineteen - Boot Camp, Ace 2, Frightmare, Traz. 
+
+--------------------------------------------------------------------------------
+
+Threshold : $2D
+Endianess : MSbF 
+Bit 0 : $22
+Bit 1 : $42
+Pilot : $40 (*768)
+Sync  : $5A
+
+
+Blocks... 
+
+First block is loaded at $0800, $0900 or $0c00 depending on game and is $0200 bytes long. 
+Number and addresses of blocks varies according to game. 
+
+Block checksums: None 
+
+Additional information: 
+
+First block start and end addresses are hard coded in main loader. 
+Execution is then passed to this first block that sets following block addresses and 
+reuses main load routine. 
+Start block address is always set at ($0060) 
+End block address is always set at ($0062) 
+There are some titles by Alternative Software and Cascade Games that also use this loader 
+
+
+
+
+
+

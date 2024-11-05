@@ -1,0 +1,41 @@
+
+
+POWERLOAD 
+
+--------------------------------------------------------------------------------
+
+Can be found on... Felix in the factory, Ghouls, Jet Power Jack and some others. 
+
+--------------------------------------------------------------------------------
+
+Threshold : $0107 (263) clock cycles (TAP byte $21).
+Bit 0 : $1C
+Bit 1 : $29
+Endianess : MSbF 
+Pilot : $02 (*1043)
+Sync : $09 down to $00
+
+Then... 
+
+n bytes : Data (I've yet to reliably compute the value of n, see notes.)
+1 byte : Checksum (0 xor all 'n' data bytes) 
+
+
+
+Notes:- 
+
+Load address etc is stored in the loader program itself, here are the locations.. 
+
+Load Address is at: $CE48,$CE4A (LSBF). 
+End Address is at: $CE50,$CE52 (LSBF). 
+Execution Address is at: $CF07,$CF08 (LSBF). 
+
+
+There seems to be more data available than actually gets loaded, following all data 
+bytes (including any unloaded data) is the XOR checkbyte, although this is not checked 
+by the loader (for obvious reasons). 
+
+
+
+
+

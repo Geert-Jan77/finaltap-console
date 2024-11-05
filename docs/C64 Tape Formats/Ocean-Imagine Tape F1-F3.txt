@@ -1,0 +1,47 @@
+
+
+OCEAN-IMAGINE TAPE
+
+--------------------------------------------------------------------------------
+
+Can be found on... Green Beret, Miami Vice, Mikie, Parallax, Ping-Pong, Rambo, Arkanoid, 
+The Great Escape, Head Over Heels, Hypersports, Mutants, Short Circuit, Top Gun, etc.. 
+
+There are 3 different Ocean-Imagine loaders found so far. The differences are very small, 
+so almost the same decoding can be used. 
+
+--------------------------------------------------------------------------------
+
+Threshold : $1E0 (480) clock cycles (TAP byte = $3B).
+Bit 0 : $24
+Bit 1 : $56
+Endianess : LSbF
+Pilot : Bit 0 (*3000+)
+Sync : Bit 1 
+Flag : $AA (only for types 2 and 3) 
+
+Data is structured from sub-blocks, each sub-block is 256 bytes long and has 2 bytes of 
+header info. 
+
+1 byte : If it is $01 then loader writes $00 to address $0001.
+1 byte : Load address (high byte only).
+256 bytes : Data. 
+
+
+
+--------------------------------------------------------------------------------
+Notes:- 
+
+The END of loading is signalled by the load address byte being $00 for types 1 & 2, for 
+type 3 the end of the loading signalled by this byte being $02. 
+
+Types 1 & 2 usually have some trailing tone present (bit 0's). (which is why reading a $00 
+byte at load address can indicate end of loading for these types). 
+
+The format is VERY similar to "Novaload Special".
+
+
+
+
+
+

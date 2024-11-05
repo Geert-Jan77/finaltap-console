@@ -1,0 +1,43 @@
+
+
+AUDIOGENIC LOADER 
+
+--------------------------------------------------------------------------------
+
+Can be found on... Exile, Loopz, World Cup Rugby, Impact, Emlyn Hughes Soccer.  
+
+--------------------------------------------------------------------------------
+
+Threshold : $013F (319) clock cycles (TAP byte $27).
+Bit 0 : $1A
+Bit 1 : $36
+Endianess : MSbF
+ 
+Pilot byte : $F0 (*4)
+Sync byte : $AA 
+
+Then...
+
+1 byte    : Load Address MSB (low byte is always 00)
+256 bytes : Data
+1 byte    : Checksum (0 XOR all data bytes) 
+
+Notes:- 
+
+The files are typically chained one after another, each has pilot and sync but there 
+is no pause between files of any single chain.
+
+Tapes may contain several chains. 
+
+
+
+The following file load addresses have special meaning to the loader...
+
+0000 - loading stops after file is loaded and code is executed.
+0100 - loading continues but the following data block needn't be consecutive.
+0200 - loading stops after file is loaded and code is executed.
+CF00 - 
+
+
+
+

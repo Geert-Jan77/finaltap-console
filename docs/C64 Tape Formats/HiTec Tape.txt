@@ -1,0 +1,37 @@
+
+HI-TEC TAPE
+
+--------------------------------------------------------------------------------
+
+Found on... 
+
+Chevy Chase     
+Crystal Kingdom Dizzy
+Road Runner & Wile E Coyote
+Top Cat in Beverly Hills Cats
+Turbo the Tortoise
+Yogi's Great Escape
+
+--------------------------------------------------------------------------------
+ 
+
+Threshold : $17E (382) clock cycles (TAP byte = $2F).
+Bit 0 : $25
+Bit 1 : $45
+Endianess : MSbF
+Pilot : $AA (*256)
+Sync : $A0 
+
+1 byte : Block Number (they start at 0)
+1 byte : VIC screen hide/show, value is $00 or $10, ($10 = show)
+2 bytes : Load Address (low,high)
+2 bytes : End Address (low,high).
+2 bytes : Execution Address (if $0000 then no action taken)
+n bytes : Data.
+1 byte : Checksum (0 xor all n data bytes)
+
+
+
+Note : The same format can be found in 'Virgin Tape' but with a lower threshold.
+
+

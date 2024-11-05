@@ -1,0 +1,35 @@
+
+
+FLASHLOAD 
+
+--------------------------------------------------------------------------------
+
+Found on..  Ghostbusters, Hacker, On Court Tennis, Rock n Bolt.
+ 
+--------------------------------------------------------------------------------
+
+Threshold : $0118 (280) clock cycles (TAP value: $22).
+Bit 0 : $1F
+Bit 1 : $31
+Endianess : MSbF
+Pilot : Bit 1 pulses (*2048) with last one being bit 0. 
+Sync byte : $33 
+
+Then...
+
+2 bytes : Load address (LSBF)
+2 bytes : End address (LSBF)
+n bytes : Data
+1 byte  : Checksum (0 XOR all data bytes) 
+
+
+Notes:-
+
+- Tapes always have an extra ROM Data block (pair), this contains the loader code. 
+
+- Loader is protected against Cartridges and Drives. 
+
+
+
+
+

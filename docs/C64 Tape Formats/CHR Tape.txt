@@ -1,0 +1,67 @@
+
+
+CHR LOADER 
+
+--------------------------------------------------------------------------------
+
+"CHR loader" is the name I recently began using for this loader/format in preference to 
+the previous names of "Cauldron", "Hewson" and "Rainbird" loaders, my reasoning for this 
+is simply that the 3 loaders are identical apart from the pulsewidth thresholds they each 
+use and this is set by just ONE byte in the CBM header (at offset $19) for each loader. 
+In 'Final TAP' they will from now on be referred to as CHR loader T1, CHR loader T2 and 
+CHR loader T3, where Tn is ordered by threshold. 
+
+--------------------------------------------------------------------------------
+
+CHR loader T1 (Previously known as CAULDRON LOADER and also KETTLE LOADER) 
+
+--------------------------------------------------------------------------------
+
+
+Threshold : $0107 (263) clock cycles (TAP byte = $20).
+Bit 0 : $19
+Bit 1 : $28
+Endianess : MSbF
+Pilot byte : $63
+Sync : $64 up to $FF (156 bytes)
+
+Then... 
+
+1 byte  : $01
+2 bytes : Start address (LSBF)
+2 bytes : End address (LSBF)
+6 bytes : Stored in zero Page
+n bytes : Data
+1 byte  : Checksum (0 XOR all data bytes) 
+
+Notes:- 
+
+There is usually also a sequence of "pre-pilot" bytes, their value is $20.
+
+
+
+--------------------------------------------------------------------------------
+CHR loader T2 (Previously known as HEWSON LOADER) 
+
+--------------------------------------------------------------------------------
+
+
+Threshold = $016E (366) microseconds (TAP byte = $2D).
+Bit 0 : $26 
+Bit 1 : $36 
+
+
+--------------------------------------------------------------------------------
+CHR loader T3 (Previously known as RAINBIRD LOADER) 
+
+--------------------------------------------------------------------------------
+
+
+Threshold = $01FA (506) microseconds (TAP byte = $3E).
+Bit 0 : $36
+Bit 1 : $47 
+
+
+
+
+

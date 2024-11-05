@@ -1,0 +1,34 @@
+
+
+JETLOAD 
+
+--------------------------------------------------------------------------------
+
+Found on Beach Head. 
+
+--------------------------------------------------------------------------------
+
+Endianess : LSbF
+Bit 0 : $33
+Bit 1 : $58
+Threshold : $01E0 clock cycles (tap byte $3B)
+Pilot byte : $00 (*2) (not actually searched for by the loader)
+Sync : $D1,$2E. 
+
+Then...
+
+2 bytes : Load address (LSBF)
+2 bytes : End address (LSBF)
+n bytes : Data
+
+
+Notes:- 
+
+- Once a file is loaded, the loader executes the Load Address.
+- There is no checksum.
+
+
+
+
+
+

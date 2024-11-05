@@ -1,0 +1,40 @@
+
+
+FIREBIRD LOADER 
+
+--------------------------------------------------------------------------------
+
+Two types are found so far, the only difference is thresholds. 
+
+T1 used on... Denarius, Pitfall, River Raid, Zenji. 
+
+T2 used on... Black Lamp, Druid 2, Sidewize, Micro Rhythm, Scary Monsters. 
+
+--------------------------------------------------------------------------------
+
+T1 Threshold = tap byte $62 ($320 clock cycles)
+Bit 0 : $44
+Bit 1 : $7E
+
+
+T2 Threshold = tap byte $52 ($29A ms)
+Bit 0 : $45
+Bit 1 : $65
+
+
+Endianess : LSbF
+Pilot byte : $02 (*254)
+Sync : $52,$42.
+
+Then... 
+
+2 bytes : Load Address (LSBF).
+2 bytes : End Address (LSBF).
+n bytes : Data
+1 byte : XOR checksum of all n Data bytes.
+
+
+
+
+
+

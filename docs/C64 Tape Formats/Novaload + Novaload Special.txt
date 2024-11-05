@@ -1,0 +1,108 @@
+
+
+NOVALOAD 
+
+--------------------------------------------------------------------------------
+
+Probably the most common of all turbotape loaders, it can be found on...
+1942, Airborne Ranger, Airwolf, Airwolf 2, Alice in Videoland, America's Cup Challenge, 
+Ancipital, Ballblazer, Bombjack, Boulderdash, Bruce Lee, Commando, Batalyx, Batty, 
+Beach Head 2, Beyond The Ice Palace, Blue Max, Blue Thunder, Bombjack, Bombjack 2, 
+Breakthru, Bruce Lee, Cluedo, Commando, Critical Mass, Dambusters, Deactivators, 
+Dropzone, Fairlight, Flyer Fox, Fort Apocalypse, Ghosts 'n' Goblins, Gunship, Hacker, 
+Impossible Mission, Mercenary, Paperboy etc...
+
+Note: Most Novaload tapes contain both 'Novaload' AND 'Novaload Special' files. 
+
+--------------------------------------------------------------------------------
+
+Threshold : $1F4 (500) clock cycles (TAP byte = $3E).
+Bit 0 : $24
+Bit 1 : $56
+Endianess : LSbF
+Pilot : Bit 0 (*2000+)
+Sync : Bit 1 
+
+Then...
+
+1 byte : $AA 
+1 byte : NOT $55 (see Novaload "special" format below) 
+
+1 byte : Length of Filename (if 0 then no filename follows)
+n bytes : Filename
+2 bytes : Start address - 256 (LSBF) 
+2 bytes : End address (LSBF) 
+2 bytes : TOTAL data size + 256 (LSBF) 
+
+The data file is split into sub-blocks, the largest volume of data in a sub-block is 256 
+bytes and each has a checkbyte of the data "so far".
+the first one follows immediately after main header (above) and each has the following 
+structure... 
+
+1 byte : Checksum so far
+n bytes : Data (256 bytes or less) 
+
+Only the last sub-block will possibly contain fewer than 256 bytes, but this of course 
+depends on the TOTAL data size, you can get the TOTAL data size from the main header, 
+so just keep track. 
+
+After all sub-blocks there is a FINAL Checkbyte... 
+
+The checkbyte starts with the first byte read (Length of filename) and is normal addition 
+of all bytes (you have to do checksum = (checksum + byte) & $FF to get correct result). 
+After you check the checksum you must also add it!. 
+
+Trailing tone : approximately 2000 Bit 0's.
+They occur at very end of each data file. (not after each sub-block). 
+
+Important : Trailing tone on Novaload frequently (always?) contains garbage pulses at 
+the beginning that may be have been intentionally written but serve no purpose other 
+than perhaps to confuse crackers, I'd strongly recommend they be overwritten with Bit 0's 
+by anyone writing a cleaning tool. (Final TAP does this already). 
+
+
+
+--------------------------------------------------------------------------------
+
+NOVALOAD SPECIAL 
+
+--------------------------------------------------------------------------------
+
+
+Threshold = $1F4 (500) clock cycles (TAP byte = $3E).
+Bit 0 : $24
+Bit 1 : $56
+Endianess : LSbF
+Pilot : Bit 0 (*2000+)
+Sync : Bit 1 
+
+After sync bit is...
+
+1 byte : $AA (FLAG)
+1 byte : $55 
+
+Then the sub-block chain begins, each sub-block is orgainised as follows... 
+
+1 byte : Start address (high byte)
+256 bytes : Data
+1 byte : Checksum 
+
+
+Notes:- 
+
+Data is structured as a chain of 256 byte sub-blocks, they are written out consecutively 
+without pauses between them. The first sub-block has pilot tone (2000+ pulses) and the 
+final sub-block has trailing tone (2000+ pulses). 
+
+The Checksum is calculated the same way as standard Novaload (starts with the 1st byte 
+AFTER $55). 
+
+There is NO final checksum. 
+
+Unlike standard Novaload, this format is flexible in where each sub-block loads, meaning 
+that ALL program files may be contained within a single chain. 
+
+
+
+
+

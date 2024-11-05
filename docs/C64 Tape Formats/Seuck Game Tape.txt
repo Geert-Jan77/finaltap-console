@@ -1,0 +1,47 @@
+
+
+SEUCK GAME TAPE
+
+--------------------------------------------------------------------------------
+
+Used by tapes created with the Shoot'em Up Construction Kit. 
+
+--------------------------------------------------------------------------------
+
+Threshold : $2E ($170 (368) clock cycles)
+Bit 0 : $20
+Bit 1 : $41
+
+Endianess : LSbF
+Pilot : $E3 (*256)
+Sync : $AC
+
+After the Sync byte the data starts immediately...
+
+63226 bytes : Data 
+
+
+
+Notes:- 
+
+- SEUCK Game loader is 'hardwired' to load just 1 file (63226 bytes) from 
+  $0900-$FFF9 (inclusive). 
+
+- The loader runs the game with a JMP $4048 (sys 16456). 
+
+- before the 256 pilot bytes there appears to be another stretch of pilot bytes which 
+  terminate in several very strange value bytes, This whole area is not useful or used 
+  in any way and may exist purely as some kind of rubbish copy protection. 
+
+- Sadly there is no checksum. 
+
+- TAPs Ive looked at (1 genuine and 1 made using VICE 1.1) appear to contain at least 1 
+  pulse that sits exactly on the threshold ($2D), I'm not exactly sure which bit this 
+  will interpret as when loaded. 
+  
+  Final TAP will recognise and complain about this. 
+
+
+
+
+

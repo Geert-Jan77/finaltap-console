@@ -1,0 +1,29 @@
+
+
+ACE OF ACES LOADER 
+
+--------------------------------------------------------------------------------
+
+Can be found on... Ace of Aces, Bounder, Express Raider, Way of the Tiger, Xevious... 
+
+--------------------------------------------------------------------------------
+
+Threshold = $168 (360) clock cycles (TAP byte= $2C).
+Bit 0 : $22
+Bit 1 : $47
+Endianess : MSbF
+Pilot : $80 (usually *256)
+Sync : $FF 
+
+Then...
+
+2 bytes : Start Address (LSBF) 
+2 bytes : End Address (LSBF) 
+16 bytes : Filename
+n bytes : Data 
+1 byte : Checksum (0 XOR all data bytes) 
+
+
+
+
+

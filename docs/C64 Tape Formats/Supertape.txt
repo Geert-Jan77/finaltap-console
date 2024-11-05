@@ -1,0 +1,140 @@
+
+
+SUPERTAPE 
+
+--------------------------------------------------------------------------------
+
+Can be found on 'Input 64' tapes (German disk-mag) also on some games by "Magic Bytes"
+such as Blue Angel 69, Beam, Crazy Cars, Mini Golf, USS John Young, Cyberworld, Domination.  
+
+--------------------------------------------------------------------------------
+
+3 different pulses are used... 
+
+(S)hort  : 261 cycles (TAP byte= $21)
+(M)edium : 396 cycles (TAP byte= $32)
+(L)ong   : 532 cycles (TAP byte= $43) 
+
+Endianess = LSbF 
+
+Each pulse type (S,M or L) has meaning depending on the current 'Status'... 
+
+---------------------------------------
+Status 1..
+
+Pulse | Bit sequence  
+
+S      0
+M      1,0   (+ switch to other status)
+L      1,1   (+ force status 1)         
+---------------------------------------
+Status 2..
+
+Pulse | Bit sequence  
+
+S      0
+M      1     (+ switch to other status)
+L      1,1   (+ force status 1)           
+---------------------------------------
+
+The loader uses an internal BIT BUFFER, and when it has (at least) 8 bits available it will 
+decode them as a byte and store at the current destination address. 
+
+It is important to note that after a byte is decoded, the BIT BUFFER is not flushed, any 
+bits remaining will be used as part of the next byte. 
+
+................................................................................................
+ie..
+
+                                     V (bit pointer)                            
+
+BIT BUFFER        15 14 13 12 11 10 09 08 : 07 06 05 04 03 02 01 00
+
+                   0  0  0  0  0  0  0  1 :  1  1  1  1  1  1  1  1   (byte = $FF)
+
+
+As each pulse is "unpacked" to its bit sequence, those bits are pushed into the buffer and the
+pointer is incremented by the number of bits pushed in, when the pointer reaches 8 (or higher),
+the lower 8 bits in the buffer (00 ->07) are recorded as the finished byte and the whole
+buffer contents shifts right by 8 places. 
+
+
+                                                               V    
+
+BIT BUFFER        15 14 13 12 11 10 09 08 : 07 06 05 04 03 02 01 00
+
+                   0  0  0  0  0  0  0  0 :  0  0  0  0  0  0  0  1    (one bit remains after last decode)
+.................................................................................................
+
+
+
+Pilot byte : $16 (*63 or 64 is common)
+Sync byte  : $2A (for header blocks). $C5 (for data blocks). 
+
+Note : Header Sync byte *can* be $3A, the loader AND's them with $EF and just looks for $2A. 
+
+
+Each file consists of two blocks, the header and the data. Each block follows a pilot, which 
+is usually around 64 bytes of $16. 
+
+
+The Supertape header file is 27 bytes long, its structure is... 
+
+ofst   size       
+
+00-15: 16 bytes : Filename
+16   : 1 byte   : $00 (not used). always seems to be #$01 on first 2 header files for no apparent reason. 
+17-18: 2 bytes  : Start address (LSBF).
+19-20: 2 bytes  : Length of file (LSBF).
+21-24: 4 bytes  : $00 (not used).
+25-26: 2 bytes  : Parity-checksum, should match the amount of Bit 1's in header bytes 0 to 24. 
+
+
+The structure of the data-block is even more simple... 
+
+n bytes : data 
+
+followed by two bytes parity-checksum, that should match the amount of Bit 1's in data 
+modulo $10000. 
+
+
+--------------------------------------------------------------------------------
+Notes:- 
+
+The formatting of the pilot sequence in terms of pulses is as follows... 
+
+   1st pilot byte... :  2nd pilot byte...
+
+   S, L, S, M, S, S...  S, M, M, M, S, S, S...   ; repeats til sync byte is found.  
+
+   0  11 0  10 0  0  :  0  1  10 1  0  0  0  
+
+   ("Status 1" $16)  :  ("Status 2" $16)  
+
+The pilot consists of a number of bytes with value $16 when decoded, the above shows the 
+alternating encoding of each byte, the first pilot byte contains 1 'M' pulse, this switches 
+the loader to status 2, the second pilot byte has 3 'M' pulses and this leaves the loader 
+in status 1 ready to correctly decode the next "Status 1" pilot byte. 
+
+The 'L' pulse in the "Status 1" pilot byte will of course force the loader to status 1 if 
+it isnt already there and guarantees the correct pilot synchronization within a few pulses 
+time. 
+
+So, the 'status' of the loader is '1' at the start of pilot but it can actually be in either 
+state when the 1st proper data byte is reached (and there MAY be bits left in the buffer too), 
+it really depends on the quantity of pilot bytes read through and the value of the sync 
+byte (differs for header and data blocks). 
+
+The important point here is that to correctly decode the data, you must first read through 
+pilot and sync bytes to get the loader (or simulated loader) into the correct state, this 
+includes both the STATUS and the BIT BUFFER. 
+
+Note: TAPs I (SJW) have examined frequently contain 6 "stray" pulses before the 1st (Status 1) 
+pilot byte, the stray pulses appear to contain a 'broken' "Status 2" pilot byte. 
+I would recommend this be removed by anyone writing a cleaning tool but it does suggest 
+that originally the pilot tone began in "Status 2" (for no particularly good reason). 
+
+
+
+
+

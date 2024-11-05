@@ -1,0 +1,45 @@
+
+
+Atlantis Tape
+
+--------------------------------------------------------------------------------
+
+Used on... 
+
+Superkid In Space (Atlantis 1991) 
+Cavemania (Atlantis 1991) 
+Hobgoblins (Atlantis 1991) 
+Moon Torc (Atlantis 1991) 
+Spooky (Atlantis 1990) 
+Superkid (Atlantis 1990) 
+
+--------------------------------------------------------------------------------
+
+Bit 0 = $1D 
+Bit 1 = $42 
+Threshold = $2F ($180 clock cycles) 
+Endianess = LSbF 
+
+Pilot : $02 (*256) 
+Sync : $52,$42 
+
+Then...
+
+1 byte  : always $03 (ignored) 
+1 byte  : always $6F (ignored) 
+2 bytes : End Address (MSBF) 
+2 bytes : Load Address (MSBF) 
+n bytes : Data. 
+1 byte  : Checkbyte (0 XOR all data bytes). 
+1 byte  : $00 (required). 
+
+Note: End Address is +1 (not written to).
+
+
+
+
+
+
+
+
+

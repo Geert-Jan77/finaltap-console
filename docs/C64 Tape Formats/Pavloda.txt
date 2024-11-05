@@ -1,0 +1,62 @@
+
+
+PAVLODA 
+
+--------------------------------------------------------------------------------
+
+The word "Pavloda" may be found printed on tape packaging using this loader/format, it is 
+likely to be an earlier version of the more common "Super-Pavloda" described elsewhere in 
+this document. 
+
+Found on...
+
+Potty Pigeon, Starion, Horace Goes Skiing, Mr Wimpy, Android 2, Bozo's Night Out, Cavelon, 
+Zim Sala Bim... 
+
+--------------------------------------------------------------------------------
+
+Threshold : $14A clock cycles (tap value $29) 
+Bit 0 : $3F 
+Bit 1 : couple $1F-$1F (see ahead) 
+
+
+Endianess : MSbF 
+Pilot : Bit 0 (*2063 about) 
+Sync : Bit 1 
+
+Then...
+
+2 bytes : Load address (LSBF) 
+2 bytes : End address (LSBF) 
+n bytes : Data 
+1 byte  : Checksum, (Addition of all n Data bytes + n) & 0xFF. 
+
+In other words you need to add all n Data bytes and add 1 for each of them. 
+
+
+--------------------------------------------------------------------------------
+
+Notes:- 
+
+We see Bit 0 and Bit 1 pulses length is not usual since the first one is bigger. The curious 
+thing is that this loader uses a rare bit reading routine... 
+
+Usually bit reading routines involving CIA timers, start one of CIA count-downs when a 
+signal is sent on the flag line and then wait next signal. When it's sent CIA timer is read 
+and if it did not reach 0 the coming pulse is bigger than threshold, otherwise it's shorter. 
+One will be Bit 0 pulse and the other Bit 1 pulse. 
+
+This loader swaps the order of these 2 operations: starts countdown when a signal is sent 
+on the flag line, but FIRST makes the timer count down to 0 and THEN checks the flag line 
+again. Of course if the coming pulse is shorter than the threshold, the next pulse size has 
+no meaning since it's just used to initialize the next countdown (syncronizes the countdown 
+with start of next data pulse). The Loader's coder decided to use Bit 1 pulse for this 
+"initialization pulse". 
+
+Of course we may say that Bit 1 pulse is $1F and each time one occurs, the next pulse has 
+no meaning. 
+
+
+
+
+

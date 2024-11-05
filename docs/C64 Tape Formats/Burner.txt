@@ -1,1 +1,51 @@
 
+
+BURNER 
+
+--------------------------------------------------------------------------------
+
+Can be found on...Ankh, Boulderdash, Chiller, Cowboy Kidz, Hyperbiker, Magic Carpet, 
+Shadowfire, Spectipede, Spy vs Spy, Star Race, Geoff Capes, Hades Nebula, Mama Llama, 
+Enigma Force, Nemesis etc... 
+
+--------------------------------------------------------------------------------
+
+Threshold = $0180 (384) clock cycles (TAP byte = $2F).
+Bit 0 : $22
+Bit 1 : $42
+Endianess : Varies per tape.
+Pilot Byte : Varies per tape. (*95).
+Sync Byte : Varies per tape.
+
+Then... 
+
+2 bytes : Start address (LSBF) 
+2 bytes : End address (LSBF) 
+n bytes : Data 
+
+
+--------------------------------------------------------------------------------
+
+Notes:- 
+
+The loader code itself is stored XOR enciphered in the CBM boot files, the XOR cipher value 
+is $59. 
+
+To find what values the loader is using for Pilot,Sync and Endianess you have to decipher 
+the first CBM header. (XOR each byte with $59). Then examine the following bytes inside 
+that (deciphered) header... 
+
+Offset |  Information 
+$0083  |  Endianess. $26=MSbF, $66=LSbF. 
+$0088  |  Pilot Byte.
+$0093  |  Sync Byte. 
+
+There are sometimes 15 unused pulses after the last data byte.
+The 15 unused pulses always(?) hold the pattern.. 001000100010101.
+This bit pattern is not interpreted by the loader in any way and the pulses may be safely 
+removed if desired. 
+
+
+
+
+

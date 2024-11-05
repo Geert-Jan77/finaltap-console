@@ -1,0 +1,59 @@
+
+
+TURBOTAPE 250 
+
+--------------------------------------------------------------------------------
+
+Found on... Giana Sisters, China Miner, Crazy Cars 3, Hollywood Poker, 
+Siren City...etc. 
+
+--------------------------------------------------------------------------------
+
+
+'Turbotape 250' uses two block types.. 
+
+The first is the Header Block which is normally 192 bytes long but can be less 
+(I've only so far found sizes of 192 and 22), and it contains information for a 
+following Data block. 
+
+
+
+Threshold : $21 ($107 clock cycles).
+Bit 0 : $19
+Bit 1 : $28
+Endianess : MSbF
+
+Pilot byte : $02 (various quantities)
+Sync : $09 down to $01 
+
+Then... 
+
+1 byte : ID... 
+
+  $00 for DATA block.
+  $01 for HEADER block (BASIC type).
+  $02 for HEADER block (PRG type). 
+
+For HEADER blocks the following data is sent after the ID :- 
+
+2 bytes  : Start address of data (LSBF)
+2 bytes  : End address of data (LSBF)
+1 byte   : Whatever $00B0 contained at the time of saving
+16 bytes : Name (PETSCII chars) 
+
+After this there MIGHT be more bytes, which are filled with value $20. Some save routines 
+save up to 192 bytes for Header (the space after Name is always filled with $20). 
+
+For DATA block there is data (length is in the Header) immediately after the ID byte. 
+
+After the Data there is an XOR checksum byte, which is XOR of Data only 
+(not ID or anything else)... 
+Note: Header does not have this XOR checksum. 
+
+Sometimes has a trailer of Bit 0's. 
+
+
+
+
+
+

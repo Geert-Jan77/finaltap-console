@@ -1,0 +1,54 @@
+
+
+WILDLOAD 
+
+--------------------------------------------------------------------------------
+
+Can be found on...Andy Capp, Championship Sprint, Citadel, Crazy Coaster, Delta, 
+Enduro Racer, Into the Eagles Nest, Joe Blade, Joe Blade 2, Quedex, Rampage, Super Hang-On, 
+Tetris, Wonderboy... 
+
+--------------------------------------------------------------------------------
+
+Threshold = $1E0 (480) clock cycles (TAP byte = $3C).
+Bit 0 : $30
+Bit 1 : $47
+Endianess : LSbF
+
+Pilot byte : $A0 (*256)
+Sync : $0A down to $01 
+
+After the sync sequence is a series of varying size sub-blocks, they are laid out end-to-end 
+without gaps and each one is organised as follows... 
+
+2 bytes : End address (LSBF)
+2 bytes : Data size (LSBF)
+1 byte  : Unknown
+n bytes : Data (enciphered. real byte = byte XOR with destination address low byte)
+1 byte  : Checkbyte 
+
+
+Notes:- 
+
+- The data is loaded in from End to Start (decreasing RAM addresses + data is written out 
+backwards).
+
+- The checkbyte value is.. 0 XOR with all (deciphered) data bytes.
+
+- The end address and data length of the final block will both be 0.
+
+- The final block (end address and length are $0000) consists of 6 bytes (actually 47 pulses) 
+
+I treat this as a small secondary filetype called "Wildload Stop". 
+
+2 bytes : End address ($00,$00)
+2 bytes : Data size ($00,$00)
+
+then 2 bytes, the last one has only has 7 pulses and im not sure what they do yet. 
+
+After final block (Wildload STOP) is sometimes around 8 pulses, these are safe to remove. 
+
+
+
+
+

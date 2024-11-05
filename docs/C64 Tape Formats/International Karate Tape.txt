@@ -1,0 +1,36 @@
+
+
+INTERNATIONAL KARATE TAPE
+
+--------------------------------------------------------------------------------
+
+Found on the game International Karate.
+
+--------------------------------------------------------------------------------
+
+Threshold : $0168 (360) clock cycles (TAP byte $2C).
+Bit 0 : $27
+Bit 1 : $3F
+Endianess : MSbF 
+Pilot : Bit 1 (*2063).
+Sync : Bit 0. 
+
+Then... 
+
+1 byte  : File Number (they begin at $01 and increment by 1)
+2 bytes : Load Address (LSBF) 
+2 bytes : End Address (LSBF) 
+2 bytes : Exe Address (LSBF) 
+n bytes : Data
+1 byte  : Checksum (0 XOR all data bytes) 
+
+Notes:- 
+
+If Exe Address is $0000 then nothing is executed, only the last file has a non-zero value. 
+
+7 unused pulses are written after the Checkbytes on my tape, they are safe to remove. 
+
+
+
+
+

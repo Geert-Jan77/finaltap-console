@@ -1,0 +1,24 @@
+
+
+MICROLOAD 
+
+--------------------------------------------------------------------------------
+
+Can be found on...Big Ben, Break Fever, Chameleon, Crystals of Carus, Dandy, Fungus, 
+Mission Elevator, Pitstop, Uchi Mata... 
+
+--------------------------------------------------------------------------------
+
+Threshold : $014D (333) clock cycles (TAP byte = $29).
+Bit 0 : $1C 
+Bit 1 : $36 
+Endianess : LSbF 
+Pilot : $A0 (*255) 
+Sync : $0A down to $01
+
+Then...
+
+2 bytes : Start address (LSBF) 
+2 bytes : Data size (LSBF). to get real size do.. (size XOR $FFFF)+1 
+n bytes : Data 
+1 byte  : Checksum (0 XOR all data bytes) 

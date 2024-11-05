@@ -1,0 +1,22 @@
+
+
+ZOIDS LOADER 
+
+--------------------------------------------------------------------------------
+
+This "artificial" loader includes three types of loaders and files:- 
+
+- CBM tape blocks.
+- Anirog tape block(s). (usually just one)
+- Freeload blocks. (usually several of them). 
+
+So far I have only found it in use on... Zoids (one release of 2), Uchi Mata (one release of 2).
+
+
+Hint : the CBM files contain an Anirog tape loader... The Anirog tape file contains a 
+Freeload loader, the Freeload blocks contain the game!. 
+
+
+
+
+

@@ -1,0 +1,49 @@
+
+
+RACK-IT TAPE 
+
+--------------------------------------------------------------------------------
+
+Used on Hewsons "Rack It" label re-releases (maybe 1st releases too?) such as... 
+Cybernoid II, Gribblys Day Out & Steel. 
+
+--------------------------------------------------------------------------------
+
+Threshold : $160 (352) clock cycles (TAP byte= $2C).
+Bit 0 : $1D
+Bit 1 : $3D
+Endianess : MSbF
+Pilot byte : varies, but these are found so far: $25, $de, $97 (usually around 220-260 of)
+Sync : varies, but these are found so far: $3d, $14, $1b 
+
+Then...
+
+1 byte  : XOR cipher value for data, if $00 not enciphered at all
+1 byte  : Bank-value
+1 byte  : XOR checksum of data (header excluded)
+2 bytes : End Address (MSBF)
+2 bytes : Start Address (MSBF)
+1 byte  : File ID
+n bytes : Data 
+
+
+--------------------------------------------------------------------------------
+
+Notes:- 
+
+Pilot (p) & Sync (s) bytes differ between tapes... 
+
+Cybernoid 2.. p:$25, s:$3D.
+Gribblys Day Out.. p:$DE, s:$14 (also for Gribblys Special Day Out).
+Steel p:$97, s:$1B.
+
+The pilots for rack-it blocks are often distorted at the beginning for first 200 pulses 
+or so, making it hard to know the exact quantity of pilot bytes.
+256 is a good number to use when repairing. 
+
+After data blocks is usually 8 unused pulses, these are safe to remove if desired. 
+
+
+
+
+

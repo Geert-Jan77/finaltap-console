@@ -1,0 +1,47 @@
+
+
+Snakeload V5.0
+
+--------------------------------------------------------------------------------
+
+Found on.. Soldier of Light, Shinobi, Saint Dragon, Ninja Warriors, Narc.
+
+--------------------------------------------------------------------------------
+
+The following text was found in "Ninja Warriors"' CBM Data file:
+SNAKELOAD V5.0 (C) STEVE SNAKE, KML 1987. THIS IS NOT SUPPOSED TO BE PROTECTED
+SO DON'T THINK YOU ARE GOOD FOR CRACKING IT !!!KYLIE RULES!
+
+
+2 pulsewidth sets have been found so far...
+
+T1...
+  Bit 0 : $3F 
+  Bit 1 : $5F 
+
+T2...
+  Bit 0 : $60 
+  Bit 1 : $A0 
+
+
+Endianess: MSbF
+
+Pilot : Bit 0 (*2063)
+Sync  : Bit 1
+
+Then...
+
+5 bytes: 65 69 6C 79 4B: "eilyK" - Identifier (read backwards: "Kylie")
+1 byte  : File ID
+2 bytes : Load address (LSBF)
+2 bytes : End address (LSBF)
+n bytes : Data
+1 byte  : Checksum (addition of all Data bytes & $FF)
+
+Trailer: Bit 0 pulses.
+
+
+
+
+
+

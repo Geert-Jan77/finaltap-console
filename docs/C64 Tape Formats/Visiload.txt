@@ -1,0 +1,112 @@
+
+
+VISILOAD 
+
+--------------------------------------------------------------------------------
+
+This is a VERY common loader, especially for Codemasters games, rather annoyingly though 
+it does NOT contain checksums. 
+
+Can be found on... 1985, Action Biker, Advanced Pinball Simulator, After the War, 
+ATV Simulator, American 3D Pool, Arcade Flight Simulator, Big Mac, Bigfoot, BMX Freestyle, 
+Bump-Set-Spike, Cage Match, Carnage, Draconus, ALL the "Dizzy" Games, Human Race, Kikstart, 
+Pod, etc.. 
+
+There appears to be at least 4 types of this loader, each loader is basically identical but 
+they each set different thresholds... 
+
+Type 1 (threshold : $1B6 clock cycles, TAP byte $37).
+Type 2 (threshold : $1E6 clock cycles, TAP byte $3D).
+Type 3 (threshold : $1F8 clock cycles, TAP byte $3F).
+Type 4 (threshold : $243 clock cycles, TAP byte $48).
+
+
+Bit 1's sampled from TAP files show values of $48+ for type 1, whilst sampled bit 1's from 
+type 2 TAPs are typically around $4B+.
+Type 3's bit 1's are found as high as $5B. Type 4's bit 1's are found as high as $64. 
+Bit 0's for types 1-3 seem roughly similar, being around $25.
+Bit 0's for type 4 are around $30. 
+
+--------------------------------------------------------------------------------
+
+        Type1   Type2   Type3   Type4  
+
+Bit 0 : $25     $25     $25     $30   (sampled)
+Bit 1 : $48     $4B     $54     $5D   (sampled) 
+Thres : $35     $3B     $3E     $47   (exact)
+
+Endianess : It changes during the loading! as does the number of bits per byte!
+Pilot byte : $00 (*256)
+Sync byte : $16 
+
+Some blocks have the Pilot tone, some don't. First block has 9 bits per byte (additional bit 
+is sent before the actual byte and it always has value 1), it has MSbF endianess and it has 
+256 bytes of Pilot tone with value $00. 
+
+eg.. 
+
+Pilot 1:0000:0000 ($00) *256
+sync 1:0001:0110 ($16)
+
+
+Structure:
+---------- 
+
+This loader changes its structure DURING actual loading (by loading 'modifier' blocks over 
+itself). The blocks that are loaded in are of different length, different endianess, have 
+different number of additional bits before each byte (their value is always 1) and have 
+different number of header bytes. Also sometimes they have pilot bytes and sometimes they 
+don't.
+
+You can determine all this by looking at the starting address of the block (see bottom of page). 
+
+Initial values of loading are : 
+
+Data Endianess : MSbF
+Pilot tone : yes
+Additional bits per byte : 1
+Additional header bytes : 0 
+
+If you should read some additional bits you must read them before actual byte starts, this is 
+done for all bytes (including Pilot bytes). So the starting pilot byte that should be read in 
+is actually 1:0000:0000 (additional bit is 1 and the byte has value $00). 
+
+Block structure :- 
+
+If pilot should be read then there are any number of bytes $00 followed by the sync byte $16. 
+If the pilot should not be read then there is no sync byte either. 
+
+After that the additional Header bytes are sent (default is 0, but can be changed later!) 
+
+Then the following 4 bytes are sent : 
+
+2 bytes : Block END address HIGH, LOW
+2 bytes : Block START address HIGH, LOW 
+
+After that the actual DATA is sent 
+
+NOTE: if Block END == Block START then 1 byte will STILL be sent! 
+
+AFTER you read in all the data you must look at the START address, 
+here are the special cases that you must consider :- 
+
+$034b : First DATA byte holds number of bits per byte for next block(s)
+$03a4 : First DATA byte holds number of additional header bytes + 3
+$0347 : if First DATA byte is $26 then next block will be MSbF else LSbF
+$03bb : Next block will have PILOT tone before it (ANY number , can be 1 !) 
+
+These values change after every 2 or 3 blocks, so the structure changes constantly throughout 
+the loading. 
+
+
+
+--------------------------------------------------------------------------------
+Notes:- 
+
+At the end of a visiload chain is often a few stray pulses (5 or more), these can be safely 
+removed if desired. they occur typically at the end of a chain immediately before a pause. 
+
+
+
+
+

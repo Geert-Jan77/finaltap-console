@@ -1,0 +1,86 @@
+
+
+SEUCK TAPE 
+
+--------------------------------------------------------------------------------
+
+Found on the "Shoot'em Up Construction Kit" tape. 
+
+For formatting of games created with SEUCK see "Seuck game tape" elsewhere. 
+
+--------------------------------------------------------------------------------
+
+Endianess : LSbF
+Threshold : $2E (368 clock cycles)
+Short : $1B
+Long : $3D 
+
+Pilot byte : $E3
+Sync byte : $D5
+
+
+This format uses 4 types of file... 
+
+- SEUCK LOADER 2
+- SEUCK HEADER FILE
+- SEUCK DATA FILE
+- SEUCK TRIGGER FILE
+
+
+The CBM files contain a loader that is set to load just ONE file to address $000A, the 
+file contains LOADER 2 and is formatted as follows... 
+
+
+--------------------------
+SEUCK LOADER 2... 
+
+Handles loading of SEUCK HEADER,DATA and TRIGGER files. 
+
+Load address = $000A, File Size = 196 bytes. 
+
+Pilot : $E3 (*10)
+Sync  : $D5
+196 bytes data
+Checksum (0 XOR all data bytes)
+
+
+--------------------------
+SEUCK HEADER FILE... 
+
+Load address = $0002, File Size = 2 bytes. 
+
+Only 1 header file exists on the tape, it provides a single load address for all following 
+DATA files to load from. 
+
+Pilot : $E3 (*10)
+Sync  : $D5
+ID Byte : Anything but $CC or $AA, the value $BB is found on the SEUCK tape)
+2 bytes : Load address (LSBF)
+
+
+--------------------------
+SEUCK DATA FILE... 
+
+Pilot : $E3 (*10)
+Sync  : $D5
+ID Byte : $CC
+1 byte  : Data length (n)
+n bytes : Data
+1 byte  : Checksum (0 XOR all data bytes).
+
+
+--------------------------
+SEUCK TRIGGER FILE...
+
+Provides a single execution address that will run the program. for the SEUCK it is $0810. 
+
+Pilot : $E3 (*10)
+Sync  : $D5
+ID Byte : $AA
+2 bytes : Execution Address ($10,$08)
+
+
+
+
+
+

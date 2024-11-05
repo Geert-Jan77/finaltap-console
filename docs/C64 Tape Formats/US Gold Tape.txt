@@ -1,0 +1,32 @@
+
+
+US GOLD TAPE
+
+--------------------------------------------------------------------------------
+
+Found on... 720 Degrees, Bionic Commando, California Games, Choplifter, 
+Crystal Castles, Gauntlet, Impossible Mission 2, Outrun, Rolling Thunder, Solomons Key, 
+Thunderblade, Trailblazer, Trailblazer 2, Turbo Outrun, World Games etc..
+
+--------------------------------------------------------------------------------
+
+Threshold : $2D ($168 clock cycles).
+Bit 0 : $25 
+Bit 1 : $3F 
+Endianess : MSbF 
+
+Pilot byte : $20 (usually *64)
+Sync byte  : $FF 
+
+Then... 
+
+16 bytes: Filename 
+2 bytes : Start Address (LSBF) 
+2 bytes : End Address (LSBF) 
+n bytes : Data 
+1 byte  : Checksum (XOR of all data bytes) 
+
+
+
+
+

@@ -1,0 +1,42 @@
+
+
+Snakeload V5.1
+
+--------------------------------------------------------------------------------
+
+Found on.. Final Blow, Rodland, SWIV, Double Dragon 3, Indy Heat.
+
+--------------------------------------------------------------------------------
+
+Bit 0 : $28
+Bit 1 : $48
+Endianess : MSbF
+Pilot : Bit 0 (*2055)
+Sync  : Bit 1
+
+Then...
+
+8 bytes: Identifier, read backwards. 3 of them have been found:
+
+B2 B4 B2 D4 CE CF D2 C6 ("FRONT242" - Uppercase and reversed) in "Final Blow", "Rod Land (Side1)" 
+85 8C 8C 85 88 83 89 8D ("MICHELLE" - Lowercase and reversed) in "S.W.I.V. (Side1)" 
+C8 C3 D4 C9 D2 C4 CC C5 ("ELDRITCH" - Uppercase and reversed) in "Rod Land (Side2)", "Double Dragon 3", "Indy Heat" 
+
+1 byte  : File ID
+2 bytes : End address (MSBF)
+2 bytes : Load address (MSBF)
+n bytes : Data
+1 byte  : Checksum
+
+Its value is calculated by XORing Data bytes and adding 1 to the XOR checksum AFTER a byte 
+is stored at an address with low byte being #$FF (eg. $08FF, $7DFF, etc.).
+
+
+Trailer: Bit 0's.
+
+
+
+
+
+
+

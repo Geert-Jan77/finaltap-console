@@ -1,0 +1,104 @@
+
+
+TENGEN/DOMARK and IMAGE WORKS tape 
+
+-------------------------------------------------------------------------------- 
+
+Found on... 
+
+3D construction kit (F1) 
+Cisco Heat (F1) 
+Badlands (F1) 
+Rugby the World Cup (F1) 
+The Spy who loved me (F1) 
+
+Skull and Crossbones A (F1)
+Skull and Crossbones B (17 F2 files) 
+
+Pit Fighter A (1 F1 file + 6 F2 files) 
+Pit Fighter B (17 F2 files) 
+
+Rampart A (F1) 
+Rampart B... 
+
+This one is weird, i think it could be a custom version of F2. 
+there appears to be file numbering (File ID) in the headers. 
+
+
+-------------------------------------------------------------------------------- 
+
+Bit 0: $44 
+Bit 1: $65 
+Endianess: LSbF 
+
+Pilot: $A0 (*255) 
+Sync: $0A down to $01 
+
+
+2 File Formats are known... 
+
+------------------------------------------------ 
+Format 1... 
+
+2 bytes: Data Size (LSBF). 
+1 byte : File ID. (Starting at $01 for the first file and incrementing) 
+n bytes: Data (encrypted). 
+1 byte : Checksum (0 XOR all decrypted data bytes). 
+
+Notes:- 
+
+Where is load address?. (not essential for FT) 
+
+------------------------------------------------ 
+Format 2 (used for multi-load parts, if any are present)... 
+
+2 bytes: Data Size (LSBF). 
+2 bytes: Load address (LSBF). 
+n bytes: File name (size is variable per tape). 
+d bytes: Data (encrypted). 
+1 byte : Checksum (0 XOR all decrypted data bytes). 
+
+Notes:- 
+
+n=1 in "Skull and Crossbones". 
+n=2 in "Cisco Heat", "Hydra" and "Pit Fighter". 
+n=4 in "Rampart". 
+
+Where is filename length?. (important) 
+
+------------------------------------------------ 
+
+To decrypt data... 
+
+a= 0 
+do
+  b = readbyte
+  b= b XOR a 
+  a= (a+1) AND $FF
+while not end of data.
+ 
+
+------------------------------------------------ 
+Notes:- 
+
+There are 2 sets of CBM files, the second one contains the loader. 
+
+Autostarting ROM cartridges are disabled. 
+
+File type "could" be identified by calculating the XOR checksum. 
+(not a method ft likes at all) 
+
+Load address is sometimes ignored ("Cisco Heat", "Pit Fighter", "Rampart"). 
+
+File load address low-byte for Format 2 files seems to always be 00. 
+this could be used to determine the filetype as Format 1 files would have 
+a value of at least 01 (file ID) in the same position.
+
+
+
+
+
+
+
+
+

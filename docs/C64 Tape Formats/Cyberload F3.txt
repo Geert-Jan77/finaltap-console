@@ -1,0 +1,48 @@
+
+
+CYBERLOAD FORMAT 3 
+
+--------------------------------------------------------------------------------
+
+The loader is contained in the first F2 file. 
+
+Files of this format will contain the actual game binaries, they are formatted as a 
+sequence of sub-blocks, each one contains 256 bytes or less. 
+
+Suprisingly they are NOT enciphered in any way. 
+
+--------------------------------------------------------------------------------
+
+Threshold : Varies between tapes.
+Endianess : MSbF
+
+
+Pilot byte : Varies between tapes (commonly $0F) (*8)
+Sync byte : Varies between tapes (commonly $CC).
+
+Then...
+
+2 bytes : Load address (LSBF).
+1 byte  : Data size (n), if $00 then n = 256.
+1 byte  : Checkbyte (see notes below).
+1 byte  : internal use.
+1 byte  : internal use.
+1 byte  : internal use.
+1 byte  : internal use.
+n bytes : Data. (n= 256 or less). 
+
+
+--------------------------------------------------------------------------------
+Notes:- 
+
+Typically these sub-block files make up the majority of a tapes contents, there are usually 
+a large number of them chained one after the other, sometimes they are seperated by pauses, 
+sometimes not. 
+
+The checkbyte in the header is the result of 0 XOR'ed with ALL bytes in the sub-block except 
+itself. 
+
+
+
+
+

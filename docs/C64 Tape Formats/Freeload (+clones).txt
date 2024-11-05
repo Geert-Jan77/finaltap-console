@@ -1,0 +1,38 @@
+
+
+FREELOAD (+clones) 
+
+--------------------------------------------------------------------------------
+
+Genuine Freeload can be found on... Barbarian, Combat School, IK+. Platoon, Robocop, 
+Slapfight, Wizball etc.. 
+
+Clones of the Freeload file format can be found on.. 180, Alleykat, Paradroid, Angleball,
+Kromazone, Spore, etc.. (see notes below). 
+
+--------------------------------------------------------------------------------
+
+Threshold : $0168 (360) clock cycles (TAP byte $2C).
+Bit 0 : $24
+Bit 1 : $41
+Endianess : MSbF 
+Pilot byte : $40 (*128)
+Sync byte : $5A 
+
+Then...
+
+2 bytes : Start address (LSBF) 
+2 bytes : End address (LSBF) 
+n bytes : Data
+1 byte : Checksum (0 XOR all data bytes) 
+
+Notes:- 
+
+This exact same file format is used by the "Graftgold" and the "180" loaders, also by 
+Mastertronics "Invade-a-load" and "Load-n-play" loaders which differ only in that they 
+use 64 pilot bytes instead of 128. 
+
+
+
+
+

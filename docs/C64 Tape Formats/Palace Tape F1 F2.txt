@@ -1,0 +1,60 @@
+
+
+Palace Tape F1
+
+--------------------------------------------------------------------------------
+
+Found on Antiriad and Rimrunner 
+
+--------------------------------------------------------------------------------
+
+Bit 0 : $30 
+Bit 1 : $5A 
+Endianess : MSbF 
+
+Tapes contain a number of separate files separated by pauses, each file is a series of 256 
+byte data blocks, each block has some additional bytes. 
+
+Load Address and Data Size (Stored as a block count) for each file is 
+hard-coded inside the loader program. 
+
+This is the file structure.... 
+
+
+- File Pilot : 01 (x100, loader requires only 15) 
+- File Header : 4A,50,47,29 (the values are meaningless, its just a sync sequence). 
+
+- Block Header : 4A,50,47,10,XX 
+  (XX begins at 0 for the first block and increments by 1 for each new block). 
+
+- Block Data (256 bytes) 
+- Block Checkbyte (0 XOR all data bytes) 
+- 1 Byte. (loader reads it but ignores) 
+
+if there is another block it follows immediately with its header. 
+
+etc.. til the end of file. 
+
+Notes :- 
+
+- Each block is 263 bytes long. (5+256+1+1). 
+- On my TAPs the last pulses of all files final trailing bytes cause read errors and must be 
+  manually corrected.
+
+
+
+--------------------------------------------------------------------------------
+
+Palace Tape F2
+
+--------------------------------------------------------------------------------
+
+Found on Barbarian.
+
+
+The same as Palace Tape F1 but there is no additional (unused) byte 
+following checkbytes.
+
+
+
+

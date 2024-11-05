@@ -1,0 +1,47 @@
+
+
+New Ocean Tape - Format 1
+
+--------------------------------------------------------------------------------
+
+Found on... The Addams Family, Adidas Soccer, Cool World, Hook, Hudson Hawk, 
+Midnight Resistance, SlySpy and WWF Wrestlemania.  
+
+--------------------------------------------------------------------------------
+
+It's a Freeload clone with an additional byte (File ID) in the header.
+ 
+
+2 pulsewidth sets have been found so far:
+
+T1... 
+   Bit 0 : $22 
+   Bit 1 : $42
+
+T2... 
+   Bit 0 : $35 
+   Bit 1 : $65 
+
+
+Endianess: MSbF
+Pilot byte : $40 (*128)
+Sync : $5A
+
+Then...
+
+1 byte  : File ID, usually ignored.
+2 bytes : Load address (LSBF).
+2 bytes : End address (LSBF).
+n bytes : Data.
+1 byte  : Checksum (0 XOR all data bytes).
+
+
+Trailer : 1 longer pulse (eg. $65) or 8 bits (various combinations were found) + 1 longer 
+pulse (type 2). 
+
+
+
+
+
+
+

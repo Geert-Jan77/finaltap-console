@@ -1,0 +1,47 @@
+
+
+CYBERLOAD FORMAT 2 
+
+--------------------------------------------------------------------------------
+
+Threshold : Varies between tapes.
+Endianess : MSbF 
+
+The loader code (LOADER2) is contained (partly enciphered) in the FORMAT1 files, it is 
+only responsible for loading *one* file containing LOADER3. 
+
+Pilot byte : Varies between tapes (commonly $0F) (*128)
+Sync byte : Varies between tapes (commonly $F0) 
+
+Header (XOR enciphered)... 
+
+2 bytes : Load address (LSBF)
+2 bytes : Data size (LSBF)
+    
+n bytes : Data (XOR enciphered).
+1 byte : always $00
+
+
+--------------------------------------------------------------------------------
+Notes:- 
+
+Because LOADER3 typically loads on a page boundary, you can usually (NOT always) read the 
+correct xor DECIPHER value in the very first byte, ie.. load address low byte will decipher 
+as $00, so just read its ciphered value and use it decipher all header bytes. (it's often 
+$AE but NOT always!) 
+
+To decipher with certainty, you will have to "snoop" the loader code. 
+
+The LOADER3 program is stored in this format, when correctly deciphered you will find the 
+string "HACKERS, FUCK OFF AND DIE" inside its file.
+
+The (n bytes) data is also XOR enciphered but uses a different key. it is usually $D2 but to 
+be sure you will have to "snoop" the LOADER2 program code. 
+
+If the game is multi-load then you will find a file of this type later in the tape also. 
+(before the additional 'multi-load' files.) 
+
+
+
+
+

@@ -1,0 +1,39 @@
+
+
+RASTERLOAD 
+
+--------------------------------------------------------------------------------
+
+This recent (1990) format seems to be mostly used by cover-tape freebies, especially 
+from 'Commodore Format' magazine, it can be found on... Game Over, Grod the Pixie, 
+Luna Landa, Overload, Vioris, Super Strike + basically ALL CF magazine cover-tape games. 
+
+--------------------------------------------------------------------------------
+
+Threshold : $200 (512) clock cycles (TAP byte = $40).
+Bit 0 : $26 
+Bit 1 : $58 
+
+Endianess : MSbF
+Pilot byte : $80 (usually *32) 
+Sync : $FF 
+
+after sync byte is... 
+
+2 bytes : Start address (LSBF) 
+2 bytes : End address (LSBF) 
+n bytes : Data 
+1 byte  : Checksum (0 XOR all data bytes)
+1 byte  : Always $FF 
+
+
+Notes :- 
+
+Sometimes the final $FF can be broken and contain fewer than 8 pulses, scanners should 
+assume a trailer of Bit 1's and simply scan through them rather than assume there will 
+be a whole byte containing 8. 
+
+
+
+
+

@@ -1,0 +1,128 @@
+
+
+SUPER PAVLODA 
+
+--------------------------------------------------------------------------------
+
+Frequently used by 'Melbourne House' games, it can be found on... 
+Way of the Exploding Fist, Fist 2, Bazooka Bill, Gyroscope, Knucklebusters... 
+
+--------------------------------------------------------------------------------
+
+Endianess: MSbF 
+
+Uses 3 pulse types, Short, Medium and Long. 
+
+2 "pulse-sets" have been found for this loader so far... 
+
+
+Super Pavloda T1 (used on "Way Of The Exploding Fist") 
+
+Short  : $2E
+Medium : $45
+Long   : $5C
+
+
+Super Pavloda T2 (used on "Fist 2") 
+
+Short  : $3E
+Medium : $5D
+Long   : $7C
+
+
+Note : a tape will only use one set, they are never mixed. 
+
+---------------------------------
+
+Encoding... 
+
+Pulses have a different meaning, depending on the current "Status"...
+
+When in Status 1... 
+--------------------
+Pulse  | Bit pattern 
+--------------------
+Short  | 1 
+Medium | 00
+Long   | 01
+--------------------
+
+When in Status 2...
+--------------------
+Pulse  | Bit pattern 
+--------------------
+Short  | 0 
+Medium | 1 
+Long   | 00
+--------------------
+
+Status may be modified at each pulse reading...
+--------------------
+Pulse  | Status
+--------------------
+Short  | Keep current
+Medium | Switch to the other
+Long   | Keep current
+--------------------
+
+Initial status = 2. 
+
+Structure: Bits are lined from left to right. In other words: MSbF. 
+
+AFTER syncronization has been done , you may group bits (by eight) to form valid data bytes. 
+Since bit encoding was used, it may happen last bit of a byte and first bit of next byte 
+were coded together (eg: .......0 0....... or .......0 1.......). 
+
+Most TAP dumps examined seem to have some crap before and after the pauses between blocks, 
+usually this is 4,5 or 6 pulses at most and tests have shown it is safe to remove. 
+
+----------------------------- 
+
+Data is structured as a chain of one or more sub-blocks, there are two types of sub-block, 
+Primary and Secondary, the first block in a chain is always Primary type and contains a 
+more detailed header section... 
+
+----------------------
+PRIMARY sub-block... 
+
+Pilot : Sequence of around 2068 Short pulses ending in a Medium pulse.
+Sync bytes : $66,$1B 
+
+1 byte  : Block Number (they begin at 0)
+1 byte  : Sub-block number (they begin at 0)
+2 bytes : Load address (low,high) -Load offset.
+1 byte  : Total data size (high)
+1 byte  : Load offset (== 256-Total file size low byte) add to load address to get real one.
+1 byte  : Header Checkbyte (addition of previous 6 bytes +6)
+n bytes : Data (n = Total data size & $FF)
+1 byte  : Checksum (0 xor all n data bytes) 
+
+
+----------------------
+SECONDARY sub-block (only present if total data size exceeds 256 bytes)... 
+
+Pilot : Usually around 40 Short pulses followed by a Medium pulse.
+Sync bytes : $66,$1B 
+
+1 byte    : Block Number (the same for all blocks in any chain)
+1 byte    : Sub-Block Number
+256 bytes : Data
+1 byte    : Checksum (0 XOR all 258 bytes, +2) 
+----------------------
+
+The Primary sub-block provides the load address and file size of ALL data contained in all 
+sub-blocks in the chain. 
+
+Data is distributed throughout the sub-blocks as follows... 
+
+If Total data size divides equally by 256, then each sub-block will contain 256 data bytes, 
+otherwise the first (Primary) block will contain a number of bytes equal to the remainder. 
+
+ie. if total_data_size = 1027, the Primary sub-block will contain 3 data bytes. (1027 & 255). 
+
+Secondary sub-blocks (if present) will always contain 256 data bytes. 
+
+
+
+
+

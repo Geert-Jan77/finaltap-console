@@ -1,0 +1,99 @@
+
+
+CYBERLOAD FORMAT 4 (MULTILOAD FILES) 
+
+--------------------------------------------------------------------------------
+
+Many Cyberload tapes contain a 4th loader (and format) if the game is a multi-loader, 
+Just to make life difficult there are at least 3 (found so far) variations in the 
+formatting of multiload files...
+ 
+As with all Cyberload file formats, the loader program itself should be located and 
+interrogated to determine the used threshold, pilot and sync variables for any particular 
+tape. 
+
+Threshold : varies between tapes (and between files for types 2 and 3).
+Endianess : MSbF
+
+
+Pilot byte : Varies beween tapes. (commonly $0F)
+Sync byte : Varies between tapes. (commonly $AA, $96 or $99)
+
+
+--------------------------------------------------------------------------------
+
+The structure of the files is very similar to Novaload, Each is organised as a chain of 
+small sub-blocks preceeded by a main header section, it is these header sections that can 
+vary between tapes... 
+
+
+Format 4, Type 1 Header (found on The Last Ninja)... 
+
+1 byte   : Sync byte
+16 bytes : Filename
+2 bytes  : Load address (LSBF)
+2 bytes  : Data size (LSBF)
+1 byte   : Header checksum (XOR of filename, load address and data size)
+n bytes  : Data
+
+
+Format 4, Type 2 Header (found on Ninja Spirit, Last Ninja 2)... 
+
+1 byte   : Sync byte
+16 bytes : Filename
+2 bytes  : Load address (LSBF)
+2 bytes  : Data size (LSBF)
+2 bytes  : Encrypted threshold to load data (LSBF)
+1 byte   : Header checksum (XOR of previous data, starting from filename)
+1 byte   : $00 closing byte (fake checksum)
+n bytes  : Data
+
+
+Format 4, Type 3 Header (found on Last Ninja 3, Vendetta, Hammerfist)... 
+
+1 byte   : Sync byte
+1 byte   : Flag byte
+16 bytes : Filename
+2 bytes  : Load address (LSBF)
+2 bytes  : Data size (LSBF)
+2 bytes  : Enciphered pulsewidth threshold (LSBF)
+1 byte   : Header checksum (XOR of previous data, starting from filename)
+1 byte   : $00 closing byte (fake checksum)
+n bytes  : Data
+
+
+After each header there begins a chain of sub-blocks with the length of each being 256 if 
+there is some more data available otherwise the length is whatever is left, until <data size> 
+data bytes are read in total. 
+
+Sub-blocks are written out consecutively without pauses or anything else between them, each 
+one has the following structure... 
+
+n bytes : Data (either 256 or less bytes)
+1 byte : XOR checksum of sub-block Data 
+
+After all sub-blocks there is a closing byte, $00, which may be thought of as a fake FINAL 
+checksum, if you XOR all blocks and their own XOR checksums, the result should be $00 if 
+the data is all ok. 
+
+
+--------------------------------------------------------------------------------
+
+Notes:- 
+
+Deciphering threshold (F4.2 & F4.3)... 
+
+High byte is shifted RIGHT thus affecting Carry, then low byte is rotated right and, after 
+clearing Carry, it is added to its starting value. Now, without clearing Carry, the 
+previously shifted high byte is added to its starting value. 
+
+In other words... Threshold = Enciphered_Threshold * 1.5!. 
+
+
+Note: The F4 loader is usually stored in a 2nd F2 file immediately preceeding any F4 files.
+      (Exceptions to this rule are Afterburner and Alien 3 which should be investigated).
+
+
+
+
+
