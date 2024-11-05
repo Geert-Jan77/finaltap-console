@@ -1,0 +1,132 @@
+
+--------------------------------------------------------------------------------
+
+Notes & Todo's on Final TAP 
+
+(c) 2006 Stewart Wilson
+
+Note: some of these notes may be applicable only to the GUI version of FT.
+--------------------------------------------------------------------------------
+
+
+  
+
+  Notes on how the functions in the scanner files work...
+
+  loadername_search()...
+
+  Locates any files of the format (may involve small tests to verify), then
+  add a small definition of the file to the database for each file found.
+  (see function 'addblockdef()').
+
+
+  loadername_describe(database row)...
+
+  Fills out remaining database fields with specific info about the file,
+  ie. load address, file size, pilot length etc.
+  also decodes the file and tests the checksum (if applicable), currently
+  some describe routines also prepare a small text (held in buffer 'info'
+  immediately after 'describe' is called) with any additional information that
+  cannot be stored in the database.
+
+
+  Notes...
+  
+  -Modified "filesearch.c" to use Mingw (and Microsoft) style _findfirst,_findnext 
+   as the original Borland routines work differently.
+  
+  -Fixed a bug in make_prgs() where 'prgunite' was true would cause crashes.
+
+  -Fixed a crash reported by GB64, cyberload f3 file was added but its size was
+   computed as -1, which crashed malloc when the file was described.
+   It's rare but other formats should probably use the same test in their scanners.
+
+
+  Notes on read errors...
+
+   - The file database 'blk' stores a read error count for each file (rd_err)
+     when that file is 'described'.
+   - The global array 'read_errors' stores locations of the 1st 100 errors found.
+   - errors will only be recorded when global flag 'note_errors' is true.
+
+
+
+
+Note: to compute threshold value as tap byte...  (CIAthreshold * 0.123156)
+        
+Note : Bleepload,CBM,Pavloda,Rackit,Supertape,Superpav,Visiload.
+       Not using find_pilot() and probably can't.
+
+todo: tighten up Ocean, its still the largest cause of misdetections.       
+ 
+
+       - TDI files are without their real load addresses.
+
+Issues 27/7/2004:-
+
+
+       - Enigma Vartiations is working but uses "read til fail" measurements
+         instead of interrogating the loader for each files info.
+         +'Sooty and sweep' gets a misdetection for binary design/virgin/hitec,
+         so these scanners have to be disabled to get a good scan.
+         +'Thomas the tank engine' gets a pavloda misdetection, same deal as
+         above.
+
+       - Tengen/Domark works fine except for multiload files (F2), I cant reliably
+         decide the filetype.
+
+
+Notes & Todo's:-
+
+       - Made Freeload pilot_min==45 to accomodate Barbarian B.
+       - Reverse on/off not yet implemented in pet2html()  (see STIX.tap)
+       - Always asks for "Include Any Subfolders?", a question that I could test for.
+       - More sorting options on batch report
+
+
+--------------------------------------------------------------------------------
+
+POSSIBLE TODO:-
+
+   - TAP splitter.
+   - implement Autofixing of bad CBM files (using the other GOOD one)
+
+TODO & BUGS...
+
+ - maybe a new Anirog loader in use on "Catacombs" and "Slapshot".
+ - if any files appear *before* the first CBM boot files they will get cut,
+ (see slc's katatb.tap (uchi mata), for a compilation tape).
+
+ - Read error counting should include the header & checksum (if exists) too.
+ 
+ - Cyberload, need a better way of choosing pulsewidths once a threshold is found.
+   it is currently quite limited.
+
+ - Turrican headers not PRG extracted.
+
+ - Add "EA" Loader (Skate or Die, Chuck Yeagers Flight Sim)
+
+ - Visiload, if v0 the scanner sometimes reads the 00's as if it were more data
+   and complains of read errors. (see kgb superspy)
+
+ - Recognise alternate platform TAP formats ie C16/Speccy etc.. and give
+   at least some kind of warning that these are unsupported.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

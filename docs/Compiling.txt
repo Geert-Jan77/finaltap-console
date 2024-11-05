@@ -1,0 +1,28 @@
+
+
+Compiling Final TAP
+
+
+The sources for this program have been prepared using the free 'Dev C++'
+IDE from Bloodshed Software and compiled with the MinGW port of GCC 
+(included with Dev C++).
+
+
+http://www.bloodshed.net
+
+
+1. Download and install Dev C++ (for Windows).
+
+2. Open the file "ftcon.dev".
+
+3. Compile (CTRL + F9).
+
+
+Sources should also compile without much modification under Unix/Linux 
+using GCC but I have not tried this yet, you would probably need to generate
+a new makefile or alter the existing one (makefile.win) and Make it.
+
+If you manage to compile it under Unix/Linux I would be grateful to receive
+a copy of the makefile used.
+
+

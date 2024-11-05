@@ -1,0 +1,49 @@
+
+
+Adding new formats to Final TAP.
+
+
+
+1. Write the new scanner file with functions 
+   - xxx_search()
+   - xxx_describe()
+   
+  +custom bit/byte reading functions if 'readttbit()' & 'readttbyte()' 
+   cannot handle it.
+
+   save your new format's source file in the 'scanners' folder and add 
+   the function prototypes to 'scanners.h'
+
+
+2. Add a definition for the format to the ft[] array. (in main file).
+
+3. Add a capitalized constant name for the format to the enum in mydefs.h
+   which should match the formats position in the ft[] array.
+
+4. Add a function call to your xxx_search() to the search_tap() function in the
+   main file.
+
+5. Add a function call to your xxx_describe() to the describe_file() function
+   in the main file.
+
+6. Add a global variable 'noxxx' (allows disabling of the scanner) to the main 
+   file and implement it as for all existing formats.
+
+7. Test thoroughly!, be very careful that your newly added format does not
+   conflict with any existing formats.
+
+
+
+Adding Loader ID for quick scanning...
+
+ Add the loader recognition CRC(s) to the 'file_id.c' file, 
+ +an entry in the mydefs.h enum of the form LID_XXX,
+ +a format ID name in knam in the main file.
+
+ Add a function call to your xxx_search() to the search_tap() function in the
+ main file (the first part where loaders are ID tested).
+   
+
+
+
+
